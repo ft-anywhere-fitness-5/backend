@@ -11,6 +11,10 @@ server.use(cors())
 server.use('/api/auth', require('../api/auth/auth-router'))
 server.use('/api/classes', restricted, require('../api/classes/classes-router'))
 
+server.get('*', (req, res, next) => {
+  res.json('api running')
+})
+
 server.use((err, req, res, next) => { //eslint-disable-line
   res.status(err.status || 500).json({
     message: err.message,
