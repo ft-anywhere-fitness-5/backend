@@ -10,8 +10,9 @@ async function addUser(user) {
 }
 
 function getUserClasses(userId) {
-    return db('users_classes as uc')
-        .leftJoin('classes as c', 'uc.class_id', 'c.class_id')
+    return db('classes as c')
+        .leftJoin('users_classes as uc', 'uc.class_id', 'c.class_id')
+        .where('uc.user_id', userId)
 }
 
 function registerUserInClass() {
@@ -22,4 +23,4 @@ function removeUserFromClass() {
     return
 }
 
-module.exports = { findUser, addUser }
+module.exports = { findUser, addUser, getUserClasses, registerUserInClass, removeUserFromClass }

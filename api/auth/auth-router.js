@@ -1,4 +1,4 @@
-const Users = require('../users/users')
+const Users = require('../users/users-model')
 const bcrypt = require('bcrypt')
 const buildToken = require('./utils/buildToken')
 const { validateBody, checkUsernameExists } = require('./auth-middleware')
@@ -17,24 +17,20 @@ router.post('/register', validateBody, checkUsernameExists, async (req, res, nex
 })
 
 router.post('/login', validateBody, checkUsernameExists, async (req, res, next) => {
-    try {
         const verifiedPassword = await bcrypt.compare(req.body.password, req.user.password)
+        const token = buildToken(req.user)
         if(verifiedPassword) {
-            res.json({
-                message: `welcome back ${req.user.username}`,
-                token: buildToken(req.user)
-            })
+            res.status(200).json({ 
+                message: `Hello ${req.user.username}`,
+                token
+             })
         } else {
             next({
-                status: 400,
+                status: 401,
                 source: 'Error while logging in',
                 message: 'Incorrect password'
             })
         }
-
-    } catch (err) {
-        next(err)
-    }
 })
 
 module.exports = router;

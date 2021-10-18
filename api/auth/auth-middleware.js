@@ -1,4 +1,4 @@
-const Users = require('../users/users')
+const Users = require('../users/users-model')
 const userSchema = require('./validation')
 const jwt = require('jsonwebtoken')
 
@@ -32,19 +32,19 @@ async function checkUsernameExists(req, res, next) {
                 message: 'username is taken',
             })
         
-            if(req.path === '/login') {
-                if(user) {
-                    req.user = user
-                    next()
-                } else {
-                    return next({
-                        status: 400,
-                        source: 'Error while login',
-                        message: 'That user does not exist',
-                    })
-                }
+        if(req.path === '/login') {
+            if(user) {
+                req.user = user
+                return next()
+            } else {
+                return next({
+                    status: 400,
+                    source: 'Error while login',
+                    message: 'That user does not exist',
+                })
             }
-            next()
+        }
+        next()
 
     } catch {
         next({
