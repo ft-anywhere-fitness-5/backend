@@ -1,5 +1,6 @@
 const Users = require('../users/users')
 const bcrypt = require('bcrypt')
+const buildToken = require('./utils/buildToken')
 const { validateBody, checkUsernameExists } = require('./auth-middleware')
 const ROUNDS = process.env.ROUNDS || 8
 
@@ -15,6 +16,25 @@ router.post('/register', validateBody, checkUsernameExists, async (req, res, nex
     }
 })
 
-router.post('/login', validateBody, checkUsernameExists, (req, res, next) => res.json('login'))
+router.post('/login', validateBody, checkUsernameExists, async (req, res, next) => {
+    try {
+        const verifiedPassword = await bcrypt.compare(req.body.password, req.user.password)
+        if(verifiedPassword) {
+            res.json({
+                message: `welcome back ${req.user.username}`,
+                token: buildToken(req.user)
+            })
+        } else {
+            next({
+                status: 400,
+                source: 'Error while logging in',
+                message: 'Incorrect password'
+            })
+        }
+
+    } catch (err) {
+        next(err)
+    }
+})
 
 module.exports = router;

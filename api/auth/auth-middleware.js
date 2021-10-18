@@ -9,14 +9,14 @@ async function checkUsernameExists(req, res, next) {
     try {
         const user = await Users.findUser({ username: req.body.username })
 
-        if(user && req.path === 'register') 
+        if(user && req.path === '/register') 
             return next({
                 status: 400,
                 source: 'Error while registering',
                 message: 'username is taken',
             })
         
-            if(req.path === 'login') {
+            if(req.path === '/login') {
                 if(user) {
                     req.user = user
                     next()
