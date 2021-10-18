@@ -1,5 +1,5 @@
 const Classes = require('./classes-model')
-
+const { validateId, validateBody } = require('./classes-middleware')
 const router = require('express').Router();
 
 router.get('/', async (req, res, next) => {
@@ -14,20 +14,29 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', validateId, async (req, res, next) => {
     try {
-        res.json(await Classes.getClassById(req.params.id))
-    } catch (err) {
-        next(err)
-        // next({
-        //     status: 400,
-        //     source: 'Error while getting classes',
-        //     message: 'Something went wrong'
-        // })
+        res.json(req.eClass)
+    } catch {
+        next({
+            status: 400,
+            source: 'Error while getting the class by id',
+            message: 'Something went wrong'
+        })
     }
 })
 
-router.post('/', (req, res, next) => res.json('create class'))
+router.post('/', async (req, res, next) => {
+    try {
+        res.json(await Classes.addClass(req.body))
+    } catch {
+        next({
+            status: 400,
+            source: 'Error while adding the class',
+            message: 'Something went wrong'
+        })
+    }
+})
 
 router.put('/:id', (req, res, next) => res.json('update a class'))
 
