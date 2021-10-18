@@ -65,12 +65,24 @@ async function addClass(newClass) {
     return newClassObject
 }
 
-function updateClass() {
-    return
+async function updateClass(eClass, id) {
+    const [updatedClass] = await db('classes')
+        .where('class_id', parseInt(id))
+        .update(eClass, [
+            'class_name',
+            'class_type',
+            'class_start_time',
+            'class_duration',
+            'class_intensity',
+            'class_location',
+            'class_registered_attendees',
+            'class_max_size'
+        ])
+        return updatedClass
 }
 async function deleteClass(class_id) {
-    const deletedClass = await getClassById(class_id)
-    await db('classes')
+    const [deletedClass] = await db('classes')
+        .returning(['class_name', 'class_type'])
         .where('class_id', parseInt(class_id))
         .del()
         return deletedClass
@@ -79,6 +91,7 @@ async function deleteClass(class_id) {
 module.exports = {
     getClasses,
     getClassById,
+    findBy,
     addClass,
     updateClass,
     deleteClass,
