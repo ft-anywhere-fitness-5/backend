@@ -43,12 +43,11 @@ router.put('/:id', validateId, validateBody, async (req, res, next) => {
     try {
         res.json(await Classes.updateClass(req.body, req.params.id))
     } catch (err) {
-        next(err)
-        // next({
-        //     status: 400,
-        //     source: 'Error while updating the class',
-        //     message: 'Something went wrong while updating'
-        // })
+        next({
+            status: 400,
+            source: 'Error while updating the class',
+            message: 'Something went wrong while updating'
+        })
     }
 })
 

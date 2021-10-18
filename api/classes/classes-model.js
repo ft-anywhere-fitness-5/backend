@@ -91,6 +91,7 @@ async function deleteClass(class_id) {
 module.exports = {
     getClasses,
     getClassById,
+    findBy,
     addClass,
     updateClass,
     deleteClass,
