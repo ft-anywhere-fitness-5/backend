@@ -30,19 +30,15 @@
 
 # Classes endpoints
 
-[GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes get all classes
-[GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} get class by id
-[POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/ add a class
-[PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} update a class by id
-[DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} delete a class by id
+- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes get all classes
+- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} get class by id
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/ add a class
+- [PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} update a class by id
+- [DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} delete a class by id
 
 # Auth endpoint 
 
-[POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register
-[POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/login
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/login
 
-# Users Classes
 
-[GET] https://ft-anywhere-fitness-5.herokuapp.com/api/  get the classes a user is registered in
-[POST] https://ft-anywhere-fitness-5.herokuapp.com/api/   register a user for a class
-[DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/   unregister a user from a class
