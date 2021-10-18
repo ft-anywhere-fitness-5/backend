@@ -1,7 +1,5 @@
 const db = require('../data/db-config');
 
-// const db = require('./data/db-config')
-
 // function getAllUsers() { return db('users') }
 
 // async function insertUser(user) {
@@ -11,18 +9,69 @@ const db = require('../data/db-config');
 //   const [newUserObject] = await db('users').insert(user, ['user_id', 'username', 'password'])
 //   return newUserObject // { user_id: 7, username: 'foo', password: 'xxxxxxx' }
 // }
-// server.get('/api/users', async (req, res) => {
-//     res.json(await getAllUsers())
-//   })
-  
-//   server.post('/api/users', async (req, res) => {
-//     res.status(201).json(await insertUser(req.body))
-//   })
 
 function getClasses() {
+    return db
+        .select(
+            'class_name',
+            'class_type',
+            'class_start_time',
+            'class_duration',
+            'class_intensity',
+            'class_location',
+            'class_registered_attendees',
+            'class_max_size'
+        )
+        .from('classes')
+}
+
+function getClassById(class_id) {
+    return db
+        .select(
+            'class_name',
+            'class_type',
+            'class_start_time',
+            'class_duration',
+            'class_intensity',
+            'class_location',
+            'class_registered_attendees',
+            'class_max_size'
+        )
+        .from('classes')
+        .where('class_id', class_id)
+}
+
+function findBy(filter) {
+    return db
+        .select(
+            'class_name',
+            'class_type',
+            'class_start_time',
+            'class_duration',
+            'class_intensity',
+            'class_location',
+            'class_registered_attendees',
+            'class_max_size'
+        )
+        .from('classes')
+        .where(filter)
+}
+
+function addClass() {
+    return
+}
+
+function updateClass() {
+    return
+}
+function deleteClass() {
     return
 }
 
 module.exports = {
-    getClasses
+    getClasses,
+    getClassById,
+    addClass,
+    updateClass,
+    deleteClass,
 }
