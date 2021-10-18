@@ -1,8 +1,24 @@
 const Users = require('../users/users')
 const userSchema = require('./validation')
+const jwt = require('jsonwebtoken')
 
 function restricted(req, res, next) {
-    next()
+    const token = req.headers.authorization
+
+    if(!token) return next({status: 401, message: 'User not logged in'})
+
+    jwt.verify(token, process.env.SECRET, (err, decodedToken) => {
+        if(err) return next({ status: 401, message: 'Invalid token' })
+        req.decodedToken = decodedToken
+        next()
+    })
+}
+
+function only(userRole) {
+    return function instructor(req, res, next){
+        if(userRole === req.decodedToken.role) return next()
+        next({ status: 403, source: 'Error with access role', message: 'access denied, incorrect role'})
+    }
 }
 
 async function checkUsernameExists(req, res, next) {
@@ -54,6 +70,7 @@ async function validateBody(req, res, next) {
 
 module.exports = {
     restricted,
+    only,
     checkUsernameExists,
     validateBody,
 }

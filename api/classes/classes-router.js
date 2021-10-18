@@ -1,5 +1,6 @@
 const Classes = require('./classes-model')
 const { validateId, validateBody } = require('./classes-middleware')
+const { only } = require('../auth/auth-middleware')
 const router = require('express').Router();
 
 router.get('/', async (req, res, next) => {
@@ -26,7 +27,7 @@ router.get('/:id', validateId, async (req, res, next) => {
     }
 })
 
-router.post('/', validateBody, async (req, res, next) => {
+router.post('/', validateBody, only('instructor'), async (req, res, next) => {
     try {
         res.json(await Classes.addClass(req.body))
     } catch {
@@ -38,7 +39,18 @@ router.post('/', validateBody, async (req, res, next) => {
     }
 })
 
-router.put('/:id', validateId, validateBody, (req, res, next) => res.json('update a class'))
+router.put('/:id', validateId, validateBody, async (req, res, next) => {
+    try {
+        res.json(await Classes.updateClass(req.body, req.params.id))
+    } catch (err) {
+        next(err)
+        // next({
+        //     status: 400,
+        //     source: 'Error while updating the class',
+        //     message: 'Something went wrong while updating'
+        // })
+    }
+})
 
 router.delete('/:id', validateId, async (req, res, next) => {
     try {
