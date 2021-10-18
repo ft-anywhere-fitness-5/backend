@@ -1,4 +1,4 @@
-const Users = require('../users/users')
+const Users = require('../users/users-model')
 const bcrypt = require('bcrypt')
 const buildToken = require('./utils/buildToken')
 const { validateBody, checkUsernameExists } = require('./auth-middleware')
