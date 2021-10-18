@@ -26,7 +26,7 @@ router.get('/:id', validateId, async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateBody, async (req, res, next) => {
     try {
         res.json(await Classes.addClass(req.body))
     } catch {
@@ -38,8 +38,18 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-router.put('/:id', (req, res, next) => res.json('update a class'))
+router.put('/:id', validateId, validateBody, (req, res, next) => res.json('update a class'))
 
-router.delete('/:id', (req, res, next) => res.json('delete a class'))
+router.delete('/:id', validateId, async (req, res, next) => {
+    try {
+        res.json(await Classes.deleteClass(req.eClass.class_id))
+    } catch (err) {
+        next({
+            status: 400,
+            source: 'Error while deleting the class',
+            message: 'Something went wrong'
+        })
+    }
+})
 
 module.exports = router;

@@ -68,8 +68,12 @@ async function addClass(newClass) {
 function updateClass() {
     return
 }
-function deleteClass() {
-    return
+async function deleteClass(class_id) {
+    const deletedClass = await getClassById(class_id)
+    await db('classes')
+        .where('class_id', parseInt(class_id))
+        .del()
+        return deletedClass
 }
 
 module.exports = {

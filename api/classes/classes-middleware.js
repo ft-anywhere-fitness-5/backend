@@ -35,7 +35,7 @@ async function validateBody(req, res, next) {
         next({
             status: 400,
             source,
-            message: err,
+            message: err.details[0].message,
         })
     }
 }
