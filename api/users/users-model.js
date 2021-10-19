@@ -26,7 +26,7 @@ function getUserClasses(userId) {
         .where('uc.user_id', userId)
 }
 
-function registerUserInClass(classId, userId) {
+function registerUserInClass(userId, classId) {
     return db('users_classes as uc')
     .insert({ class_id: classId, user_id: userId })
     .returning('class_id')

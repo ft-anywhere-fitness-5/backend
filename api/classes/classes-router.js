@@ -1,6 +1,6 @@
 const Classes = require('./classes-model')
 const { validateId, validateBody } = require('./classes-middleware')
-const { only } = require('../auth/auth-middleware')
+const { only, restricted } = require('../auth/auth-middleware')
 const router = require('express').Router();
 
 router.get('/', async (req, res, next) => {
@@ -27,7 +27,7 @@ router.get('/:id', validateId, async (req, res, next) => {
     }
 })
 
-router.post('/', validateBody, only('instructor'), async (req, res, next) => {
+router.post('/', validateBody, restricted, only('instructor'), async (req, res, next) => {
     try {
         res.json(await Classes.addClass(req.body))
     } catch {
@@ -39,7 +39,7 @@ router.post('/', validateBody, only('instructor'), async (req, res, next) => {
     }
 })
 
-router.put('/:id', validateId, validateBody, only('instructor'), async (req, res, next) => {
+router.put('/:id', validateId, validateBody, restricted, only('instructor'), async (req, res, next) => {
     try {
         res.json(await Classes.updateClass(req.body, req.params.id))
     } catch (err) {
@@ -51,7 +51,7 @@ router.put('/:id', validateId, validateBody, only('instructor'), async (req, res
     }
 })
 
-router.delete('/:id', validateId, only('instructor'), async (req, res, next) => {
+router.delete('/:id', validateId, restricted, only('instructor'), async (req, res, next) => {
     try {
         res.json(await Classes.deleteClass(req.eClass.class_id))
     } catch (err) {

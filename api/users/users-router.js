@@ -11,12 +11,19 @@ router.get('/:id', async (req, res, next) => {
             source: 'error while fetching users classes',
             message: 'Cannot get users classes'
         })
-    }
-    
+    }   
 })
 
-router.post('/:id', (req, res) => {
-    res.json('register a user in a class')
+router.post('/:id', async (req, res, next) => {
+    try{
+        res.json(await Users.registerUserInClass(req.params.id, req.body.class_id))
+    } catch {
+        next({
+            status: 400,
+            source: 'Error with registering for the class',
+            message: 'Something went wrong with registering'
+        })
+    }
 })
 
 router.delete('/:id', (req, res) => {

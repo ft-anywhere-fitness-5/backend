@@ -27,18 +27,16 @@
 - If your frontend devs are clear on the shape of the data they need, you can quickly build provisional endpoints that return mock data. They shouldn't have to wait for you to build the entire backend.
 
 - PostgreSQL comes with [fantastic built-in functions](https://hashrocket.com/blog/posts/faster-json-generation-with-postgresql) for hammering rows into whatever JSON shape.
-
-# Classes endpoints
-
-- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes get all classes
-- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} get class by id
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/ add a class
-- [PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} update a class by id
-- [DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/{id} delete a class by id
-
 # Auth endpoint 
 
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register requires (username, password, role(defaults to client))(all strings) where the username must be unique. Returns {message, token} where 
 - [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/login
 
 
+# Classes endpoints
+
+- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes returns an array of class objects
+- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/:class_id returns the class object
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/ requires a class object, (class_name (string), class_type(string),class_start_time(string), class_duration(integer), class_intensity(string),class_location(string), class_registered_attendees(integer), class_max_size(integer)), returns the newly create class object
+- [PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/:class_id requires a class object, same as above, returns the updated class object
+- [DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/classes/api/classes/:class_id returns the deleted id of the class
