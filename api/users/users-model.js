@@ -32,8 +32,11 @@ function registerUserInClass(userId, classId) {
     .returning('class_id')
 }
 
-function removeUserFromClass() {
-    return
+function removeUserFromClass(userId, classId) {
+    return db('users_classes as uc')        
+    .returning('class_id')
+    .where({ class_id: parseInt(classId), user_id: parseInt(userId) })
+    .del()
 }
 
 module.exports = { findUser, addUser, getUserClasses, registerUserInClass, removeUserFromClass }
