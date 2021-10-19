@@ -15,7 +15,7 @@ router.get('/:id', async (req, res, next) => {
     
 })
 
-router.post('/', (req, res) => {
+router.post('/:id', (req, res) => {
     res.json('register a user in a class')
 })
 

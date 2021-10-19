@@ -26,8 +26,10 @@ function getUserClasses(userId) {
         .where('uc.user_id', userId)
 }
 
-function registerUserInClass() {
-    return
+function registerUserInClass(classId, userId) {
+    return db('users_classes as uc')
+    .insert({ class_id: classId, user_id: userId })
+    .returning('class_id')
 }
 
 function removeUserFromClass() {
