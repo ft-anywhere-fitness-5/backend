@@ -26,8 +26,16 @@ router.post('/:id', async (req, res, next) => {
     }
 })
 
-router.delete('/:id', (req, res) => {
-    res.json('unregister a user from a class')
+router.delete('/:id', async (req, res, next) => {
+    try {
+        res.json(await Users.removeUserFromClass(req.params.id, req.body.class_id))
+    } catch {
+        next({
+            status: 400,
+            source: 'Error when deleting a class',
+            message: 'Could not delete the user from class'
+        })
+    }
 })
 
 module.exports = router
