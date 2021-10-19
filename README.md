@@ -29,8 +29,8 @@
 - PostgreSQL comes with [fantastic built-in functions](https://hashrocket.com/blog/posts/faster-json-generation-with-postgresql) for hammering rows into whatever JSON shape.
 # Auth endpoint 
 
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register requires (username, password, role(defaults to client))(all strings) where the username must be unique. Returns {message, token} where 
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/login
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register requires (username, password, role(defaults to client))(all strings) where the username must be unique. Returns { username, user_id }
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/login requires valid credentials (username, password) Returns {message, token} where message is 'Hello username'
 
 
 # Classes endpoints
