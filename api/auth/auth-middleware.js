@@ -3,7 +3,7 @@ const userSchema = require('./validation')
 const jwt = require('jsonwebtoken')
 
 function restricted(req, res, next) {
-    const token = req.headers.token
+    const token = req.headers.authorization
 
     if(!token) return next({status: 401, message: 'User not logged in'})
 
