@@ -9,6 +9,7 @@ server.use(helmet())
 server.use(cors())
 
 server.use('/api/auth', require('../api/auth/auth-router'))
+server.use('/api/user', require('../api/users/users-router'))
 server.use('/api/classes', require('../api/classes/classes-router'))
 
 server.get('*', (req, res) => {
