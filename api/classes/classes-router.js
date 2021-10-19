@@ -39,7 +39,7 @@ router.post('/', validateBody, only('instructor'), async (req, res, next) => {
     }
 })
 
-router.put('/:id', validateId, validateBody, async (req, res, next) => {
+router.put('/:id', validateId, validateBody, only('instructor'), async (req, res, next) => {
     try {
         res.json(await Classes.updateClass(req.body, req.params.id))
     } catch (err) {
@@ -51,7 +51,7 @@ router.put('/:id', validateId, validateBody, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', validateId, async (req, res, next) => {
+router.delete('/:id', validateId, only('instructor'), async (req, res, next) => {
     try {
         res.json(await Classes.deleteClass(req.eClass.class_id))
     } catch (err) {
