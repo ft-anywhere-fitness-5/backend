@@ -9,7 +9,7 @@ function restricted(req, res, next) {
 
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
         console.log(process.env.SECRET)
-        if(err) return next({ status: 401, message: 'Wrong token', test: process.env.SECRET})
+        if(err) return next({ status: 401, message: `Wrong token ${process.env.SECRET}` })
         req.decoded = decoded
         next()
     })
