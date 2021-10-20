@@ -29,17 +29,17 @@
 - PostgreSQL comes with [fantastic built-in functions](https://hashrocket.com/blog/posts/faster-json-generation-with-postgresql) for hammering rows into whatever JSON shape.
 # Auth endpoint 
 
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register requires (username, password, role(defaults to client))(all strings) where the username must be unique. Returns { username, user_id }
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/login requires valid credentials (username, password) Returns {message, token} where message is 'Hello username'
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/register requires (username, password, role(defaults to client))(all strings) where the username must be unique. Returns { username, user_id }.
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/auth/login requires valid credentials (username, password) Returns {message, user,token} where message is 'Hello username', and the user is the full user object.
 
 
 # Classes endpoints
 
-- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes returns an array of class objects
-- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id returns the class object
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/ requires a class object, (class_name (string), class_type(string),class_start_time(string), class_duration(integer), class_intensity(string),class_location(string), class_registered_attendees(integer), class_max_size(integer)), returns the newly create class object
-- [PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id requires a class object, same as above, returns the updated class object
-- [DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id returns the deleted id of the class
+- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes returns an array of class objects.
+- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id returns the class object.
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/ requires a class object, (class_name (string), class_type(string),class_start_time(string), class_duration(integer), class_intensity(string),class_location(string), class_registered_attendees(integer), class_max_size(integer)), returns the newly create class object.
+- [PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id requires a class object, same as above, returns the updated class object.
+- [DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id returns the deleted id of the class, class name and class type.
 
 
 # Users endpoints

@@ -9,11 +9,11 @@ server.use(helmet())
 server.use(cors())
 
 server.use('/api/auth', require('../api/auth/auth-router'))
-server.use('/api/user', require('../api/users/users-router'))
-server.use('/api/classes', restricted, require('../api/classes/classes-router'))
+server.use('/api/user', restricted, require('../api/users/users-router'))
+server.use('/api/classes', require('../api/classes/classes-router'))
 
-server.get('*', (req, res) => {
-  res.send(`<h2>Anywhere Fitness API</h2>`)
+server.use('*', (req, res) => {
+  res.send(`<h2>Anywhere Fitness 5 API</h2>`)
 })
 
 server.use((err, req, res, next) => { //eslint-disable-line

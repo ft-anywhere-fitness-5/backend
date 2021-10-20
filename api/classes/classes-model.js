@@ -82,7 +82,7 @@ async function updateClass(eClass, id) {
 }
 async function deleteClass(class_id) {
     const [deletedClass] = await db('classes')
-        .returning(['class_name', 'class_type'])
+        .returning(['class_name', 'class_type', 'class_id'])
         .where('class_id', parseInt(class_id))
         .del()
         return deletedClass
