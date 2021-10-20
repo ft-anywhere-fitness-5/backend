@@ -29,6 +29,20 @@ router.post('/', restricted, async (req, res, next) => {
     }
 })
 
+router.put('/:id', restricted, async (req, res, next) => {
+    const user_id = req.decoded.subject
+    try{
+        res.json(await Users.updateUsersClass(user_id, req.params.id, {class_id: req.body.class_id}))
+    } catch (err) {
+        next(err)
+        // next({
+        //     status: 400,
+        //     source: 'Error with rescheduling for the class',
+        //     message: 'Something went wrong with rescheduling'
+        // })
+    }
+})
+
 router.delete('/', restricted, async (req, res, next) => {
     const user_id = req.decoded.subject
     try {

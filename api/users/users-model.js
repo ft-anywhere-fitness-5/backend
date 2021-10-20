@@ -35,10 +35,8 @@ async function registerUserInClass(userId, classId) {
     const chosenClass = await Classes.getClassById(classId)
     const alreadyInClass = await getUserClassById(userId, classId)
     
-    if(alreadyInClass.length > 0){
-        return 'You are already registered for this class'
-
-    } else if(parseInt(chosenClass[0].class_max_size) > parseInt(chosenClass[0].class_registered_attendees)) {
+    if(alreadyInClass.length > 0) return 'You are already registered for this class'
+    else if(parseInt(chosenClass[0].class_max_size) > parseInt(chosenClass[0].class_registered_attendees)) {
         try {
                 await db.transaction(async trx => {
                     const usersClass = { class_id: parseInt(classId.class_id), user_id: parseInt(userId) }
@@ -54,13 +52,34 @@ async function registerUserInClass(userId, classId) {
     } else return 'max class size already reached'
 }
 
+async function updateUsersClass(userId, oldClassId, newClassId) {
+    const oldClass = await Classes.getClassById({ class_id: parseInt(oldClassId)})
+    const newClass = await Classes.getClassById(newClassId)
+    
+    if(await getUserClassById(userId, newClassId).length > 1) return 'You are already in that class'
+    else if(!newClass) return 'That class does not exist'
+    try {
+        await db.transaction(async trx => {
+            await trx('users_classes')
+                .where({ user_id: parseInt(userId), class_id: parseInt(oldClassId) })
+                .update('class_id', parseInt(newClassId.class_id))
+                await trx('classes')
+                .where('class_id', newClassId.class_id)
+                .update('class_registered_attendees', newClass[0].class_registered_attendees + 1)
+                await trx('classes')
+                .where({ class_id: parseInt(oldClassId) })
+                .update('class_registered_attendees', oldClass[0].class_registered_attendees - 1)
+        })
+    } catch {
+        return 'There was an error rescheduling your class'
+    }
+}
+
 async function removeUserFromClass(userId, classId) {
     const chosenClass = await Classes.getClassById(classId)
     const alreadyInClass = await getUserClassById(userId, classId)
 
-    if(alreadyInClass.length < 1) {
-        return 'You are not registered in this class'
-    }
+    if(alreadyInClass.length < 1) return 'You are not registered in this class'
     try {
         await db.transaction(async trx => {
             const usersClass = { class_id: parseInt(classId.class_id), user_id: parseInt(userId) }
@@ -75,4 +94,11 @@ async function removeUserFromClass(userId, classId) {
     }
 }
 
-module.exports = { findUser, addUser, getUserClasses, registerUserInClass, removeUserFromClass }
+module.exports = { 
+    findUser, 
+    addUser, 
+    getUserClasses, 
+    registerUserInClass, 
+    updateUsersClass, 
+    removeUserFromClass 
+}
