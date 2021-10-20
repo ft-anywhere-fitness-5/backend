@@ -21,11 +21,24 @@ router.post('/', restricted, async (req, res, next) => {
     try{
         res.json(await Users.registerUserInClass(user_id, {class_id: req.body.class_id}))
     } catch (err) {
+        next({
+            status: 400,
+            source: 'Error with registering for the class',
+            message: 'Something went wrong with registering'
+        })
+    }
+})
+
+router.put('/:id', restricted, async (req, res, next) => {
+    const user_id = req.decoded.subject
+    try{
+        res.json(await Users.updateUsersClass(user_id, req.params.id, {class_id: req.body.class_id}))
+    } catch (err) {
         next(err)
         // next({
         //     status: 400,
-        //     source: 'Error with registering for the class',
-        //     message: 'Something went wrong with registering'
+        //     source: 'Error with rescheduling for the class',
+        //     message: 'Something went wrong with rescheduling'
         // })
     }
 })
@@ -33,7 +46,7 @@ router.post('/', restricted, async (req, res, next) => {
 router.delete('/', restricted, async (req, res, next) => {
     const user_id = req.decoded.subject
     try {
-        res.json(await Users.removeUserFromClass(user_id, req.body.class_id))
+        res.json(await Users.removeUserFromClass(user_id, {class_id: req.body.class_id}))
     } catch (err) {
         next({
             status: 400,

@@ -34,33 +34,71 @@ function getUserClassById(userId, classId) {
 async function registerUserInClass(userId, classId) {
     const chosenClass = await Classes.getClassById(classId)
     const alreadyInClass = await getUserClassById(userId, classId)
-    console.log(alreadyInClass)
     
-    if(alreadyInClass.length > 0){
-        return 'You are already registered for this class'
+    if(alreadyInClass.length > 0) return 'You are already registered for this class'
+    else if(parseInt(chosenClass[0].class_max_size) > parseInt(chosenClass[0].class_registered_attendees)) {
+        try {
+                await db.transaction(async trx => {
+                    const usersClass = { class_id: parseInt(classId.class_id), user_id: parseInt(userId) }
+                    await trx('users_classes').insert(usersClass).returning('class_id')
+                    await trx('classes')
+                        .where('class_id', classId.class_id)
+                        .update('class_registered_attendees', chosenClass[0].class_registered_attendees + 1)
+            })
+            return chosenClass
+        } catch {
+            return 'There was an error when registering for the class'
+        }
+    } else return 'max class size already reached'
+}
 
-    } else if(parseInt(chosenClass[0].class_max_size) > parseInt(chosenClass[0].class_registered_attendees)) {
-        // transaction
-        // db('classes')
-        //     .where("class_id", classId.class_id)
-        //     .update('class_registered_attendees', chosenClass[0].class_registered_attendees + 1)
-        // return db('users_classes')
-        //     .insert({ class_id: parseInt(classId.class_id), user_id: parseInt(userId) })
-        //     .returning('class_id')
+async function updateUsersClass(userId, oldClassId, newClassId) {
+    const oldClass = await Classes.getClassById({ class_id: parseInt(oldClassId)})
+    const newClass = await Classes.getClassById(newClassId)
+    
+    if(await getUserClassById(userId, newClassId).length > 1) return 'You are already in that class'
+    else if(!newClass) return 'That class does not exist'
+    try {
+        await db.transaction(async trx => {
+            await trx('users_classes')
+                .where({ user_id: parseInt(userId), class_id: parseInt(oldClassId) })
+                .update('class_id', parseInt(newClassId.class_id))
+                await trx('classes')
+                .where('class_id', newClassId.class_id)
+                .update('class_registered_attendees', newClass[0].class_registered_attendees + 1)
+                await trx('classes')
+                .where({ class_id: parseInt(oldClassId) })
+                .update('class_registered_attendees', oldClass[0].class_registered_attendees - 1)
+        })
+    } catch {
+        return 'There was an error rescheduling your class'
     }
-    return 'max class size already reached'
-
 }
 
-// - [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/ requires a class id object({"class_id": 1}). returns the class id.
-// - [DELETE]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/ requires a class id object, same as above. returns the deleted class id 
+async function removeUserFromClass(userId, classId) {
+    const chosenClass = await Classes.getClassById(classId)
+    const alreadyInClass = await getUserClassById(userId, classId)
 
-function removeUserFromClass(userId, classId) {
-    // transaction here as well
-    // return db('users_classes as uc')        
-    // .returning('class_id')
-    // .where({ class_id: parseInt(classId), user_id: parseInt(userId) })
-    // .del()
+    if(alreadyInClass.length < 1) return 'You are not registered in this class'
+    try {
+        await db.transaction(async trx => {
+            const usersClass = { class_id: parseInt(classId.class_id), user_id: parseInt(userId) }
+            await trx('users_classes').where(usersClass).del()
+            await trx('classes')
+                .where({ class_id: classId.class_id })
+                .update('class_registered_attendees', chosenClass[0].class_registered_attendees - 1)
+        })
+        return classId.class_id
+    } catch {
+        return 'There was an error when un-registering for the class'
+    }
 }
 
-module.exports = { findUser, addUser, getUserClasses, registerUserInClass, removeUserFromClass }
+module.exports = { 
+    findUser, 
+    addUser, 
+    getUserClasses, 
+    registerUserInClass, 
+    updateUsersClass, 
+    removeUserFromClass 
+}

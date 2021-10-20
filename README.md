@@ -36,7 +36,7 @@
 # Classes endpoints
 
 - [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes returns an array of class objects.
-- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id returns the class object.
+- [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id returns an array with the class object.
 - [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/ requires a class object, (class_name (string), class_type(string),class_start_time(string), class_duration(integer), class_intensity(string),class_location(string), class_registered_attendees(integer), class_max_size(integer)), returns the newly create class object.
 - [PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id requires a class object, same as above, returns the updated class object.
 - [DELETE] https://ft-anywhere-fitness-5.herokuapp.com/api/classes/:class_id returns the deleted id of the class, class name and class type.
@@ -45,4 +45,6 @@
 # Users endpoints
 
 - [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/ returns an array of class objects specific to a user
-
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/ requires a class id object({"class_id": 1}). returns the class object.
+- [PUT]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/:class_id the url takes in the old class id, requires a class id object of the updated class, same as above, returns the updated class id.
+- [DELETE]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/ requires a class id object, same as above. returns the deleted class id 
