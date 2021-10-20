@@ -32,7 +32,7 @@ router.post('/', restricted, async (req, res, next) => {
 router.delete('/', restricted, async (req, res, next) => {
     const user_id = req.decoded.subject
     try {
-        res.json(await Users.removeUserFromClass(user_id, req.body.class_id))
+        res.json(await Users.removeUserFromClass(user_id, {class_id: req.body.class_id}))
     } catch (err) {
         next({
             status: 400,
