@@ -45,5 +45,5 @@
 # Users endpoints
 
 - [GET]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/:user_id returns an array of class objects specific to a user
-- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/:user_id requires a class id. returns the class id.
-- [DELETE]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/:user_id requires a class id. returns the deleted class id
+- [POST]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/:user_id requires a class id object({"class_id": 1}). returns the class id.
+- [DELETE]  https://ft-anywhere-fitness-5.herokuapp.com/api/user/:user_id requires a class id object, same as above. returns the deleted class id
