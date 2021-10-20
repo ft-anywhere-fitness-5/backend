@@ -9,7 +9,7 @@ module.exports = ({user_id, username, role}) => {
     const options = {
         expiresIn: '1d',
     }
-    const SECRET = process.env.SECRET || 'development'
+    const SECRET = process.env.SECRET 
 
     return jwt.sign(payload, SECRET, options)
 }
