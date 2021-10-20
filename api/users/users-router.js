@@ -19,13 +19,14 @@ router.get('/', restricted ,async (req, res, next) => {
 router.post('/', restricted, async (req, res, next) => {
     const user_id = req.decoded.subject
     try{
-        res.json(await Users.registerUserInClass(user_id, req.body.class_id))
+        res.json(await Users.registerUserInClass(user_id, {class_id: req.body.class_id}))
     } catch (err) {
-        next({
-            status: 400,
-            source: 'Error with registering for the class',
-            message: 'Something went wrong with registering'
-        })
+        next(err)
+        // next({
+        //     status: 400,
+        //     source: 'Error with registering for the class',
+        //     message: 'Something went wrong with registering'
+        // })
     }
 })
 
