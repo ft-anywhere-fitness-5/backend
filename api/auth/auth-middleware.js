@@ -7,7 +7,8 @@ function restricted(req, res, next) {
 
     if(!token) return next({status: 401, message: 'User not logged in'})
 
-    jwt.verify(token, process.env.SECRET ?? 'shhSmolCrow', (err, decoded) => {
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        console.log(process.env.SECRET)
         if(err) return next({ status: 401, message: 'Invalid token' })
         req.decoded = decoded
         next()
