@@ -7,16 +7,16 @@ function restricted(req, res, next) {
 
     if(!token) return next({status: 401, message: 'User not logged in'})
 
-    jwt.verify(token, process.env.SECRET, (err, decodedToken) => {
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
         if(err) return next({ status: 401, message: 'Invalid token' })
-        req.decodedToken = decodedToken
+        req.decoded = decoded
         next()
     })
 }
 
 function only(userRole) {
     return function instructor(req, res, next){
-        if(userRole === req.decodedToken.role) return next()
+        if(userRole === req.decoded.role) return next()
         next({ status: 403, source: 'Error with access role', message: 'access denied, incorrect role'})
     }
 }
