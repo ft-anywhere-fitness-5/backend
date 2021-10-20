@@ -1,4 +1,4 @@
-# Build Week Scaffolding for Node and PostgreSQL
+# Anywhere Fitness 5 API
 
 ## Scripts
 
