@@ -43,7 +43,7 @@ async function registerUserInClass(userId, classId) {
                     await trx('users_classes').insert(usersClass).returning('class_id')
                     await trx('classes')
                         .where('class_id', classId.class_id)
-                        .update('class_registered_attendees', chosenClass[0].class_registered_attendees + 1)
+                        .update('class_registered_attendees', parseInt(chosenClass[0].class_registered_attendees) + 1)
             })
             return chosenClass
         } catch {
@@ -54,9 +54,9 @@ async function registerUserInClass(userId, classId) {
 
 async function updateUsersClass(userId, oldClassId, newClassId) {
     const oldClass = await Classes.getClassById({ class_id: parseInt(oldClassId)})
-    const newClass = await Classes.getClassById(newClassId)
+    const newClass = await Classes.getClassById(parseInt(newClassId))
     
-    if(await getUserClassById(userId, newClassId).length > 1) return 'You are already in that class'
+    if(await getUserClassById(userId, parseInt(newClassId)).length > 1) return 'You are already in that class'
     else if(!newClass) return 'That class does not exist'
     try {
         await db.transaction(async trx => {
@@ -64,11 +64,11 @@ async function updateUsersClass(userId, oldClassId, newClassId) {
                 .where({ user_id: parseInt(userId), class_id: parseInt(oldClassId) })
                 .update('class_id', parseInt(newClassId.class_id))
                 await trx('classes')
-                .where('class_id', newClassId.class_id)
-                .update('class_registered_attendees', newClass[0].class_registered_attendees + 1)
+                .where('class_id', parseInt(newClassId.class_id))
+                .update('class_registered_attendees', parseInt(newClass[0].class_registered_attendees) + 1)
                 await trx('classes')
                 .where({ class_id: parseInt(oldClassId) })
-                .update('class_registered_attendees', oldClass[0].class_registered_attendees - 1)
+                .update('class_registered_attendees', parseInt(oldClass[0].class_registered_attendees) - 1)
         })
     } catch {
         return 'There was an error rescheduling your class'
@@ -86,7 +86,7 @@ async function removeUserFromClass(userId, classId) {
             await trx('users_classes').where(usersClass).del()
             await trx('classes')
                 .where({ class_id: classId.class_id })
-                .update('class_registered_attendees', chosenClass[0].class_registered_attendees - 1)
+                .update('class_registered_attendees', parseInt(chosenClass[0].class_registered_attendees) - 1)
         })
         return classId.class_id
     } catch {
