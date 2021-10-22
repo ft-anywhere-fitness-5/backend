@@ -19,6 +19,7 @@ beforeAll(async () => {
 })
 beforeEach(async () => {
   await db.seed.run()
+  await request(server).post('/api/auth/register').send({ username: 'Virginia', password: 'Richmond', role: 'instructor' })
 })
 afterAll(async () => {
   await db.destroy()
@@ -41,9 +42,9 @@ describe('[GET] /:id', () => {
 })
 
 describe('[POST] /', () => {
-    let res
     beforeEach(async ()=> {
-        res = await request(server).post('/api/classes').send(class1)
+        let instructor = await request(server).post('/api/auth/login').send({ username: 'Virginia', password: 'Richmond' })
+        await request(server).post('/api/classes').set('authorization', instructor.body.token).send(class1)
     })
     it('add a new class to the database', async () => {
         const classes = await db('classes')
@@ -54,24 +55,30 @@ describe('[POST] /', () => {
 describe('[PUT] /:id', () => {
     let res
     beforeEach(async ()=> {
-        res = await request(server).put('/api/classes/1').send(class1)
+        let instructor = await request(server).post('/api/auth/login').send({ username: 'Virginia', password: 'Richmond' })
+        res = await request(server).put('/api/classes/1').set('authorization', instructor.body.token).send(class1)
     })
     it('updates the class with the specified id', async () => {
         const updatedClass = await db('classes').where('class_id', 1).first()
-        console.log(updatedClass)
+        expect(updatedClass).toHaveProperty('class_name', res.body.class_name)
     })
 })
 
 describe('[DELETE] /:id', () => {
-    let res
-    it('deletes the class with the specified id', async () => {
-        
+    beforeEach(async ()=> {
+        let instructor = await request(server).post('/api/auth/login').send({ username: 'Virginia', password: 'Richmond' })
+        await request(server).delete('/api/classes/1').set('authorization', instructor.body.token)
+    })
+    it('deletes the class with the specified id from the database', async () => {
+        const classes = await db('classes').where('class_id', 1)
+        expect(classes).toHaveLength(0)
     })
 })
 
 describe('*', () => {
     let res
-    it('responds with a message if endpoint not found', async () => {
-        
+    it('responds with an error message if incorrect url', async () => {
+        res = await request(server).delete('/api/classes')
+        expect(res.body.message).toMatch(/not found/i)
     })
 })

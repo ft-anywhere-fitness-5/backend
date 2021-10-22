@@ -74,4 +74,15 @@ describe('[POST] /login', ()=> {
     it('user receives a auth token', () => {
         expect(res.body).toHaveProperty('token')
     })
+    describe('login error messages', ()=> {
+        it('responds with error when username does not exist in database', async () => {
+        const res = await request(server).post('/api/auth/login').send({ username: "Pennsylvania", password: "Harrisburg" })
+        expect(res.body.message).toMatch(/That user does not exist/i)
+        })
+        it('responds with error when password is incorrect', async () => {
+        const res = await request(server).post('/api/auth/login').send({ username: 'Virginia', password: 'Annapolis' })
+        expect(res.body.message).toMatch(/Incorrect password/i)
+        }) 
+    })
+
 })
