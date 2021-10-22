@@ -12,7 +12,7 @@ const userSchema = Joi.object({
             }),
     password: Joi.string()
             .trim()
-            .min(5)
+            .min(5).message('Password must be at least 5 characters long.')
             .required()            
             .messages({
                 'any.required': 'Password is required.',

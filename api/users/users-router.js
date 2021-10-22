@@ -34,12 +34,11 @@ router.put('/:id', restricted, async (req, res, next) => {
     try{
         res.json(await Users.updateUsersClass(user_id, req.params.id, {class_id: req.body.class_id}))
     } catch (err) {
-        next(err)
-        // next({
-        //     status: 400,
-        //     source: 'Error with rescheduling for the class',
-        //     message: 'Something went wrong with rescheduling'
-        // })
+        next({
+            status: 400,
+            source: 'Error with rescheduling for the class',
+            message: 'Something went wrong with rescheduling'
+        })
     }
 })
 
